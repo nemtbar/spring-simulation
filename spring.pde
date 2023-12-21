@@ -4,6 +4,10 @@ class Slider2{
     PVector _color;
     String name;
     Slider2(String kname, int kposx, int kposy, int kwid, int khei, float kmin, float kmax, float value, PVector kcolor){
+        /*
+        l_ means local
+        g_ means global
+        */
         posx = kposx;
         posy = kposy;
         wid = kwid;
@@ -20,34 +24,34 @@ class Slider2{
         _color = kcolor;
         name = kname;
     }
-  void show(){
-    fill(255, 255, 255);
-    rect(posx, posy, wid, hei);
-    fill(_color.x, _color.y, _color.z);
-    rect(g_min, posy+hei/4, l_value, hei-hei/4*2);
-    fill(255, 0, 0);
-    circle(g_buttonx, g_buttony, radius);
-    fill(0, 0, 0, 255);
-    String gumi = new String(str(map(g_value, g_min, g_max, value_min, value_max)));
-    text(name+":"+gumi, g_min, posy+hei/2);
+    void show(){
+        fill(255, 255, 255);
+        rect(posx, posy, wid, hei);
+        fill(_color.x, _color.y, _color.z);
+        rect(g_min, posy+hei/4, l_value, hei-hei/4*2);
+        fill(255, 0, 0);
+        circle(g_buttonx, g_buttony, radius);
+        fill(0, 0, 0, 255);
+        String rubber = new String(str(map(g_value, g_min, g_max, value_min, value_max)));
+        text(name+":"+rubber, g_min, posy+hei/2);
 
-  }
-  void grab(){
-    if (dist(mouseX, mouseY, g_buttonx, g_buttony) < radius && mousePressed){
-      g_value = mouseX;
-      if (g_value < g_min){
-        g_value = int(g_min);
-      } else if (g_value > g_max){
-        g_value = int(g_max);
-      }
     }
+    void grab(){
+        if (dist(mouseX, mouseY, g_buttonx, g_buttony) < radius && mousePressed){
+            g_value = mouseX;
+            if (g_value < g_min){
+                g_value = int(g_min);
+            } else if (g_value > g_max){
+                g_value = int(g_max);
+            }
+        }
 
-  }
-  void update(){
-    l_value = g_value - int(g_min);
-    g_buttonx = g_value;
+    }
+    void update(){
+        l_value = g_value - int(g_min);
+        g_buttonx = g_value;
 
-  }
+    }
     float get_value(){
         return map(g_value, g_min, g_max, value_min, value_max);
     }
@@ -135,18 +139,6 @@ class Spring{
             force.normalize();
             force.mult(-k*ext);
             spring[i-1].apply(force);
-            spring[i].apply(force.mult(-1));
-
-
-            /*
-            else if(i == spring.length-1){
-                PVector force1 = PVector.sub(spring[i-1].pos, spring[i].pos);
-                float ext1 = force1.mag() - len;
-                force1.normalize();
-                force1.mult(-k*ext1);
-                spring[i].apply(force1);
-            }
-            */
         }
     }
 
@@ -180,26 +172,27 @@ class Spring{
 
     }
 }
-
+//k is springiness
 float k = 0.8;
-Spring gumi;
+Spring rubber;
 Slider2 slid;
 void setup(){
     fullScreen();
-    gumi = new Spring(new PVector(10, height/2), new PVector(width-10, height/2), 40);
+    rubber = new Spring(new PVector(10, height/2), new PVector(width-10, height/2), 40);
     slid = new SLider2("k", 30, 30, 100, 20, 0.0005, 0.8, 0.8, new PVector(252, 252, 3));
 }
 
 void draw(){
     background(245, 199, 108);
     stroke(255, 255, 255);
-    gumi.attract(k);
-    gumi.update();
-    gumi.show();
+    rubber.attract(k);
+    rubber.update();
+    rubber.show();
+    //calls every necessary function to slider
     slid.frame();
     k = slid.get_value();
 }
 
 void mouseReleased() {
-        gumi.release();
+        rubber.release();
 }
