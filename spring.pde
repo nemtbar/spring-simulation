@@ -179,7 +179,7 @@ Slider2 slid;
 void setup(){
     fullScreen();
     rubber = new Spring(new PVector(10, height/2), new PVector(width-10, height/2), 40);
-    slid = new SLider2("k", 30, 30, 100, 20, 0.0005, 0.8, 0.8, new PVector(252, 252, 3));
+    slid = new Slider2("k", 30, 30, 100, 20, 0.0005, 0.8, 0.8, new PVector(252, 252, 3));
 }
 
 void draw(){
